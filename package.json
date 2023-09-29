@@ -1,0 +1,12 @@
+{
+    "name": "leetcode",
+    "version": "1.0.0",
+    "description": "",
+    "main": "findSum.js",
+    "scripts": {
+        "start": "node findSum.js"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC"
+}
