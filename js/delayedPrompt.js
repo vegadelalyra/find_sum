@@ -29,4 +29,5 @@ function delayedPrompt(text, delay = 20) {
 
 module.exports = {
     delayedPrompt,
+    interface,
 }
