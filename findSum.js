@@ -9,7 +9,7 @@ process.stdin.on('data', function (data) {
 
     process.stdout.clearLine()
     process.stdout.cursorTo(0)
-    console.clear()
+    process.stdout.write('\u001b[2J\u001b[0;0H')
     console.log(
         'Hi, rlyeh!\nPlease insert a list of numbers\nseparated by space...'
     )
