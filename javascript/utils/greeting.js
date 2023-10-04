@@ -1,5 +1,5 @@
-const { getDeviceName } = require('./js/greeting.js')
-const { delayedPrompt, interface } = require('./js/delayedPrompt.js')
+const { getDeviceName } = require('./getDeviceName.js')
+const { delayedPrompt, interface } = require('./delayedPrompt.js')
 const readline = require('readline')
 
 console.clear()

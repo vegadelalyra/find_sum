@@ -4,7 +4,7 @@
     "description": "",
     "main": "findSum.js",
     "scripts": {
-        "start": "node findSum.js"
+        "start": "node js/findSum.js"
     },
     "keywords": [],
     "author": "",
