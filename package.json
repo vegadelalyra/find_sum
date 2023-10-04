@@ -4,9 +4,17 @@
     "description": "",
     "main": "findSum.js",
     "scripts": {
-        "start": "node js/findSum.js"
+        "start": "ts-node typescript/find_pairs.ts",
+        "test": ""
     },
     "keywords": [],
     "author": "",
-    "license": "ISC"
+    "license": "ISC",
+    "devDependencies": {
+        "@types/readline-sync": "^1.4.5",
+        "ts-node": "^10.9.1"
+    },
+    "dependencies": {
+        "readline-sync": "^1.4.10"
+    }
 }

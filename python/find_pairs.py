@@ -24,7 +24,7 @@ if __name__ == '__main__':
         numbers = [int(num) for num in re.split(r',\s*', args.numbers)]
     else:
         # If numbers are not provided as an argument, prompt the user
-        numbers_message = 'Enter a list of up to two-digit numbers separated by commas: '
+        numbers_message = 'Enter a list of up to two-digit numbers separated by commas:\n'
         two_digits_num_re = r'^\s*\d{1,2}(\s*,\s*\d{1,2})*\s*$'
         
         while True:
@@ -35,8 +35,8 @@ if __name__ == '__main__':
 
     if args.target_sum is None:
         # If target_sum is not provided as an argument, prompt the user
-        target_sum_message = 'Enter an up to two-digit target sum number: '
-        two_digits_num_re = r'^\s*\d{1,2}\s*$'
+        target_sum_message = 'Enter an up to three-digit target sum number:\n'
+        two_digits_num_re = r'^\s*\d{1,3}\s*$'
 
         while True:
             target_sum = input(target_sum_message)
