@@ -1,3 +1,6 @@
+import re
+import argparse
+
 def find_pairs(nums, target_sum):
     seen_numbers = set()
 
@@ -8,40 +11,42 @@ def find_pairs(nums, target_sum):
             print(f"+ {num},{diff}")
 
         seen_numbers.add(num)
-    
 
 if __name__ == '__main__':
-    import sys
-    import re
+    parser = argparse.ArgumentParser(description='Find pairs of numbers that add up to a target sum.')
+    parser.add_argument('numbers', nargs='?', default='', type=str, help='List of numbers separated by commas')
+    parser.add_argument('target_sum', nargs='?', default=None, type=int, help='Target sum')
 
-    numbers_message = 'Enter a list of\nup to two-digit numbers\nseparated by commas:\n'
-    target_sum_message = 'Enter an up to two-digit\ntarget sum number:\n'
-    two_digits_num_re = r'^\s*\d{1,2}(\s*,\s*\d{1,2})*\s*$'
+    args = parser.parse_args()
 
-    if len(sys.argv) < 3:
+    if args.numbers:
+        # Split the comma-separated numbers into a list
+        numbers = [int(num) for num in re.split(r',\s*', args.numbers)]
+    else:
+        # If numbers are not provided as an argument, prompt the user
+        numbers_message = 'Enter a list of up to two-digit numbers separated by commas: '
+        two_digits_num_re = r'^\s*\d{1,2}(\s*,\s*\d{1,2})*\s*$'
+        
         while True:
             numbers = input(numbers_message)
             if re.match(two_digits_num_re, numbers):
-                numbers = list(map(int, numbers.split(',')))
-                break 
-    
-    if len(sys.argv) < 2:
+                numbers = [int(num) for num in re.split(r',\s*', numbers)]
+                break
+
+    if args.target_sum is None:
+        # If target_sum is not provided as an argument, prompt the user
+        target_sum_message = 'Enter an up to two-digit target sum number: '
+        two_digits_num_re = r'^\s*\d{1,2}\s*$'
+
         while True:
             target_sum = input(target_sum_message)
             if re.match(two_digits_num_re, target_sum):
                 target_sum = int(target_sum)
                 break
-        
-    # try:
-        if not numbers: 
-            numbers = list(map(int, sys.argv[1].split(',')))
-        if not target_sum: 
-            target_sum = int(sys.argv[2])
+    else:
+        target_sum = args.target_sum
 
-        if all(-99 <= num <= 99 for num in numbers):
-            find_pairs(numbers, target_sum)
-        else:
-            print('Please ensure all numbers have at most 2 digits!')
-    # except ValueError: 
-    #     print('Invalid input. Please provide a valid list of numbers and a target sum.')
-    #     print(ValueError.args)
+    if all(-99 <= num <= 99 for num in numbers):
+        find_pairs(numbers, target_sum)
+    else:
+        print('Please ensure all numbers have at most 2 digits!')
