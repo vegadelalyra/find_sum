@@ -8,68 +8,71 @@ function findPairs(nums: number[], targetSum: number): boolean {
     for (const num of nums) {
         const diff: number = targetSum - num
 
-        if (seenNumbers.has(diff) && !seenNumbers.has(num)) {
+        if (seenNumbers.has(diff) && (!seenNumbers.has(num) || diff == num)) {
             console.log(`+ ${num},${diff}`)
             if (!hasAValidPair) hasAValidPair = true
         }
-
         seenNumbers.add(num)
     }
-
     return hasAValidPair
 }
 
 
 /* User Experience at Command Line Interface */
-const numbersInput: string | undefined = process.argv[2]
-const targetSumInput: string | undefined = process.argv[3]
 
-let numbers: number[]
+/* Retrieve user's passed arguments, if any */
+let numbersInput: string | undefined = process.argv[2]
+let targetSumInput: string | undefined = process.argv[3]
 
-if (numbersInput) {
-    numbers = numbersInput.split(',').map(numStr => parseInt(numStr, 10))
-} else {
-    while (true) {
-        const input: string = readlineSync.question('Enter a list of numbers:\n')
-        if (/\d/.test(input)) {
-            numbers = curateInput(input) as number[]
-            console.log(`\n> ${numbers}\n`)
-            break
-        }
-    }
+
+/* numbersInput: Handling the list of numbers */
+
+/* While numbers input keeps without digits, ask for input */
+while (!/\d/.test(numbersInput))
+    numbersInput = readlineSync.question('Enter a list of numbers:\n')
+
+/* Curate numbers list */
+let numbers: number[] = curateInput(numbersInput)
+
+/* While numbers list carries only one number, ask for more inputs */
+while (numbers.length == 1) {
+    let input = readlineSync.question('\nAdd one or more numbers to your list:\n')
+    if (!input) continue
+
+    const moreNums: number[] = curateInput(input)
+    numbers = [...numbers, ...moreNums]
 }
 
-let targetSum: number | string
+/* show curated numbers list */
+console.log(`\n> ${numbers}\n`)
 
-if (targetSumInput)
-    targetSum = parseInt(targetSumInput, 10)
-else {
-    const targetSumMessage: string = 'Enter a target sum number:\n'
+/* targetSumInput: Handling the target sum number */
+while (!/\d/.test(targetSumInput))
+    targetSumInput = readlineSync.question('Enter a target sum number:\n')
 
-    while (true) {
-        const input: string = readlineSync.question(targetSumMessage)
-        if (/\d/.test(input)) {
-            /* 3 groups regex: 
-                * (\D*?) captures all possible non-digit chars
-                * (\d+) captures one or more digit chars
-                * (\D*).* captures all non-digit chars
-                * replace all the string with just the $1st and $2nd group
-            */
-            targetSum = input.replace(/(\D*?)(\d+)(\D*).*/, "$1$2")
-            targetSum = curateInput(targetSum) as number
-            console.log(`\nList:\n${numbers}`)
-            console.log(`\nTarget: ${targetSum}\n`)
-            break
-        }
-    }
-}
+/* 3 groups regex: 
+    * (\D*?) captures all possible non-digit chars
+    * (\d+) captures one or more digit chars
+    * (\D*).* captures all non-digit chars
+    * replace all the string with just the $1st and $2nd group
+*/
+
+/* Curate targetSumInput */
+targetSumInput = targetSumInput.replace(/(\D*?)(\d+)(\D*).*/, "$1$2")
+const targetSum: number = curateInput(targetSumInput)[0]
+
+
+/* Find pairs and log results! */
+console.log(`\nList:\n${numbers}`)
+console.log(`\nTarget: ${targetSum}\n`)
 
 console.log('Results:')
 const hasPairs = findPairs(numbers, targetSum)
 if (!hasPairs) console.log('No pairs in the list fit the target sum.')
 
 
-function curateInput(input: string): number[] | number {
+/* curate input function: will retrieve signed number from any input */
+function curateInput(input: string): number[] {
     // Replace non-digit or non-hyphen characters with one empty space
     let cleanedInput = input.replace(/[^-\d]+/g, ' ')
 
@@ -92,7 +95,5 @@ function curateInput(input: string): number[] | number {
     cleanedInput = cleanedInput.replace(/\D+$/, '');
 
     // Split the string by ','
-    return cleanedInput.includes(',') 
-    ? cleanedInput.split(',').map(Number)
-    : parseInt(cleanedInput)
+    return cleanedInput.split(',').map(Number)
 }
