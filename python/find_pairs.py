@@ -1,7 +1,6 @@
 import re
 import sys
 
-
 def find_pairs(nums, target_sum):
     seen_numbers = set()
     has_a_valid_pair = False
@@ -46,65 +45,70 @@ def curate_input(input_str):
 
 def main():
     while True:
-        # Retrieve user's passed arguments, if any
-        numbers_input = sys.argv[1] if len(sys.argv) > 1 else None
-        target_sum_input = sys.argv[2] if len(sys.argv) > 2 else None
+        try:
+            # Retrieve user's passed arguments, if any
+            numbers_input = sys.argv[1] if len(sys.argv) > 1 else None
+            target_sum_input = sys.argv[2] if len(sys.argv) > 2 else None
 
-        # Manipulate user CL arguments to give a neato experience
-        if len(sys.argv) == 4 and ',' not in sys.argv[1]:
-            numbers_input = sys.argv[1] + ' ' + sys.argv[2]
-            target_sum_input = sys.argv[3]
+            # Manipulate user CL arguments to give a neat experience
+            if len(sys.argv) == 4 and ',' not in sys.argv[1]:
+                numbers_input = sys.argv[2] + ' ' + sys.argv[3]
+                target_sum_input = sys.argv[4]
 
-        if len(sys.argv) > 4:
-            numbers_input = ' '.join(sys.argv[1:-1])
-            target_sum_input = sys.argv[-1]
+            if len(sys.argv) > 4:
+                numbers_input = ' '.join(sys.argv[2:-1])
+                target_sum_input = sys.argv[-1]
 
-        # numbers_input: Handling the list of numbers
-        while not any(char.isdigit() for char in str(numbers_input)):
-            numbers_input = input('Enter a list of numbers:\n')
+            # numbers_input: Handling the list of numbers
 
-        # Curate numbers list
-        numbers = curate_input(numbers_input)
+            # While numbers input keeps without digits, ask for input
+            while not any(char.isdigit() for char in str(numbers_input)):
+                numbers_input = input('Enter a list of numbers:\n')
 
-        # If user passed it as sys.argv, show
-        if numbers_input is not None and any(char.isdigit() for char in str(numbers_input)) and target_sum_input is None:
-            print('\nCurrent numbers list:\n>', numbers)
+            # Curate numbers list
+            numbers = curate_input(numbers_input)
 
-        # While numbers list carries only one number, ask for more inputs
-        while len(numbers) == 1:
-            input_str = input('\nAdd one or more numbers to your list:\n')
-            if not input_str:
-                continue
+            # If the user passed it as sys.argv, show
+            if numbers_input is not None and any(char.isdigit() for char in str(numbers_input)) and target_sum_input is None:
+                print('\nCurrent numbers list:\n>', numbers)
 
-            more_nums = curate_input(input_str)
-            numbers.extend(more_nums)
+            # While numbers list carries only one number, ask for more inputs
+            while len(numbers) == 1:
+                input_str = input('\nAdd one or more numbers to your list:\n')
+                if not input_str:
+                    continue
 
-        # Show curated numbers list after user input it
-        if numbers_input is None or not any(char.isdigit() for char in str(numbers_input)):
-            print('\n>', numbers)
+                more_nums = curate_input(input_str)
+                numbers.extend(more_nums)
 
-        # target_sum_input: Handling the target sum number
-        while target_sum_input is None or not any(char.isdigit() for char in str(target_sum_input)):
-            target_sum_input = input('\nEnter a target sum number:\n')
+            # Show curated numbers list after the user inputs it
+            if numbers_input is None or not any(char.isdigit() for char in str(numbers_input)):
+                print('\n>', numbers)
 
-        # Curate target_sum_input
-        target_sum_input = re.sub(
-            r'(\D*?)(\d+)(\D*).*', r'\1\2', target_sum_input)
-        target_sum = int(target_sum_input)
+            # target_sum_input: Handling the target sum number
+            while target_sum_input is None or not any(char.isdigit() for char in str(target_sum_input)):
+                target_sum_input = input('\nEnter a target sum number:\n')
 
-        # Find pairs and log results
-        print(f'\nList:\n{numbers}')
-        print(f'\nTarget: {target_sum}\n')
+            # Curate target_sum_input
+            target_sum_input = re.sub(r'(\D*?)(\d+)(\D*).*', r'\1\2', target_sum_input)
+            target_sum = int(target_sum_input)
 
-        print('Results:')
-        has_pairs = find_pairs(numbers, target_sum)
-        if not has_pairs:
-            print('No pairs in the list fit the target sum.\n')
-        else:
-            print('\n')
+            # Find pairs and log results
+            print(f'\nList:\n{numbers}')
+            print(f'\nTarget: {target_sum}\n')
 
-        sys.argv = []
+            print('Results:')
+            has_pairs = find_pairs(numbers, target_sum)
+            if not has_pairs:
+                print('No pairs in the list fit the target sum.\n\n')
+            else:
+                print('\n')
 
+            sys.argv = []
+
+        except KeyboardInterrupt:
+            print("\nExiting the program. Goodbye!")
+            sys.exit(0)
 
 if __name__ == "__main__":
     main()
