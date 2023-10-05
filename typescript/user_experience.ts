@@ -73,7 +73,7 @@ while (true) {
 
     console.log('Results:')
     const hasPairs = findPairs(numbers, targetSum)
-    if (!hasPairs) console.log('No pairs in the list fit the target sum.\n')
+    if (!hasPairs) console.log('No pairs in the list fit the target sum.\n\n')
     else console.log('\n')
 
     process.argv = []
