@@ -24,6 +24,20 @@ function findPairs(nums: number[], targetSum: number): boolean {
 let numbersInput: string | undefined = process.argv[2]
 let targetSumInput: string | undefined = process.argv[3]
 
+/* Manipulate user CL arguments to give a neato experience */
+if (process.argv.length == 4 && !process.argv[2].includes(',')) {
+    numbersInput = process.argv[2] + ' ' + process.argv[3]
+    targetSumInput = process.argv[4]
+}
+
+if (process.argv.length > 4) {
+    numbersInput = process.argv
+        .slice(2)
+        .reduce((a, b) => a + ' ' + b)
+
+    targetSumInput = process.argv
+        .at(-1) as string
+}
 
 /* numbersInput: Handling the list of numbers */
 
@@ -34,6 +48,10 @@ while (!/\d/.test(numbersInput))
 /* Curate numbers list */
 let numbers: number[] = curateInput(numbersInput)
 
+/* if user passed it as process.argv, show */
+if (/\d/.test(process.argv[2]) && targetSumInput == undefined)
+    console.log('\nCurrent numbers list:\n>', numbers)
+
 /* While numbers list carries only one number, ask for more inputs */
 while (numbers.length == 1) {
     let input = readlineSync.question('\nAdd one or more numbers to your list:\n')
@@ -43,12 +61,12 @@ while (numbers.length == 1) {
     numbers = [...numbers, ...moreNums]
 }
 
-/* show curated numbers list */
-console.log(`\n> ${numbers}\n`)
+/* show curated numbers list after user input it */
+if (!/\d/.test(process.argv[2])) console.log(`\n>`, numbers)
 
 /* targetSumInput: Handling the target sum number */
 while (!/\d/.test(targetSumInput))
-    targetSumInput = readlineSync.question('Enter a target sum number:\n')
+    targetSumInput = readlineSync.question('\nEnter a target sum number:\n')
 
 /* 3 groups regex: 
     * (\D*?) captures all possible non-digit chars
