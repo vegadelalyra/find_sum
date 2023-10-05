@@ -34,22 +34,33 @@ if (numbersInput) {
         if (input) {
             // Replace non-digit or non-hyphen characters with one empty space
             let cleanedInput = input.replace(/[^-\d]+/g, ' ')
-    
+            
             // Replace '- ' with '-'
             cleanedInput = cleanedInput.replace(/- /g, '-')
-    
+
+            // Replace ' -' with '-'
+            cleanedInput = cleanedInput.replace(/ -/g, '-')
+
             // Replace successive hyphens '----' with a single '-'
             cleanedInput = cleanedInput.replace(/-+/g, '-')
-    
+
             // Replace hyphens with ',-'
             cleanedInput = cleanedInput.replace(/-/g, ',-')
-    
+
             // Replace remaining blank spaces with commas ','
             cleanedInput = cleanedInput.replace(/\s+/g, ',')
-    
+
+            // Delete commas at the beginning of the string
+            if (cleanedInput.charAt(0) === ',')
+                cleanedInput = cleanedInput.substring(1)
+
+            // Delete all chars different from a num at the end
+            while (!/\d$/.test(cleanedInput))
+                cleanedInput = cleanedInput.slice(0, -1)
+
             // Split the string by ','
             const numbersArray: number[] = cleanedInput.split(',').map(Number)
-    
+
             console.log(`\n> ${numbersArray}\n`)
             break
         }
